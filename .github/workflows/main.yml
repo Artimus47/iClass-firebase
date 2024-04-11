@@ -73,4 +73,3 @@ jobs:
         if: always()
         with:
           sarif_file: 'image-results.sarif'
-    
