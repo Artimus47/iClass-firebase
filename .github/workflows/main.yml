@@ -62,7 +62,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Pull Docker image
-        run: docker pull artimus47/images:iclass
+        run: docker pull artimus47/iclass:latest
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -82,6 +82,7 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: Trivy Scan Results
           body: Attached are the Trivy scan results.
+          from: arrtimus224@gmail.com
           to: artimusfowl5@gmail.com
           attachments: |
             image-results.sarif
