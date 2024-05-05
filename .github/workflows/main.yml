@@ -72,18 +72,4 @@ jobs:
           output: 'image-results.sarif'
           severity: 'CRITICAL'
           
-      - name: Upload Trivy scan results to Gmail
-        uses: dawidd6/action-send-mail@v3
-        if: always()
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Trivy Scan Results
-          body: Attached are the Trivy scan results.
-          from: artimusfowl5@gmail.com
-          to: arrtimus224@gmail.com
-          attachments: |
-            image-results.sarif
-            results.sarif
+     
