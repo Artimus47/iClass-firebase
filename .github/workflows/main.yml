@@ -82,8 +82,8 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: Trivy Scan Results
           body: Attached are the Trivy scan results.
-          from: arrtimus224@gmail.com
-          to: artimusfowl5@gmail.com
+          from: artimusfowl5@gmail.com
+          to: arrtimus224@gmail.com
           attachments: |
             image-results.sarif
             results.sarif
