@@ -1,6 +1,7 @@
 name: Test
 
 on: 
+  workflow_dispatch: 
   pull_request:  
     branches: [main]
   push:
@@ -49,28 +50,39 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
 
+
   trivy_image_scan:
-     needs: [build_and_upload_image]
-    
-     runs-on: ubuntu-latest
-     steps:
+    needs: [build_and_upload_image]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Login to Docker registry
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Pull Docker image
-        run: docker pull artimus47/iclass
-        
+        run: docker pull artimus47/images:iclass
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'artimus47/iclass:latest'
+          image-ref: 'artimus47/images:iclass'
           format: 'sarif'
           output: 'image-results.sarif'
           severity: 'CRITICAL'
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+          
+      - name: Upload Trivy scan results to Gmail
+        uses: dawidd6/action-send-mail@v3
         if: always()
         with:
-          sarif_file: 'image-results.sarif'
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Trivy Scan Results
+          body: Attached are the Trivy scan results.
+          to: artimusfowl5@gmail.com
+          attachments: |
+            image-results.sarif
+            results.sarif
